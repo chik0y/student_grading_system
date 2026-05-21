@@ -20,14 +20,35 @@ $row = $student->fetch_assoc();
 
 
 
-
 $sql="SELECT * FROM `tbl_english` WHERE student_id ='$id'";
 $student_english = $con->query($sql) or die ($con->error);
-$student_row = $student_english->fetch_assoc();
+$english_student_row = $student_english->fetch_assoc();
+$total = $student_english->num_rows;
+
+if ($total > 0) {
+    $total = $english_student_row['prelim'] + $english_student_row['midterm'] + $english_student_row['finals'];
+    $eng_ave = $total / 3;
 
 
-$total = $student_row['prelim'] + $student_row['midterm'] + $student_row['finals'];
-$ave = $total / 3;
+} else {
+    echo '';
+}
+
+
+$sql="SELECT * FROM `tbl_math` WHERE student_id ='$id'";
+$student_math = $con->query($sql) or die ($con->error);
+$math_student_row = $student_math->fetch_assoc();
+$total = $student_math->num_rows;
+
+if ($total > 0) {
+    $total = $math_student_row['prelim'] + $math_student_row['midterm'] + $math_student_row['finals'];
+    $math_ave = $total / 3;
+
+} else {
+    echo '';
+}
+
+
 
 
 
@@ -59,12 +80,32 @@ $ave = $total / 3;
     </tr>
 
     <tr>
-        <td><?php echo $student_row['prelim'];?></td>
-        <td><?php echo $student_row['midterm'];?></td>
-        <td><?php echo $student_row['finals'];?></td>
-        <td><?php echo ($ave > 75) ? 'PASSED' : 'FAILED';?></td>
+        <td><?php echo (!empty($english_student_row['prelim']) ? $english_student_row['prelim'] : 'No data');?></td>
+        <td><?php echo (!empty($english_student_row['midterm']) ? $english_student_row['midterm'] : 'No data');?></td>
+        <td><?php echo (!empty($english_student_row['finals']) ? $english_student_row['finals'] : 'No data');?></td>
+        <td><?php echo (empty($eng_ave) ? 'No data' : ($eng_ave >= 75 ? 'PASSED' : 'FAILED'))?></td>
+        
     </tr>
 </table>
+
+<table>
+    <h2>Math</h2>
+    <tr>
+        <th>Prelim</th>
+        <th>Midterm</th>
+        <th>Finals</th>
+        <th>Remarks</th>
+    </tr>
+
+    <tr>
+        <td><?php echo (!empty($math_student_row['prelim']) ? $math_student_row['prelim'] : 'No data');?></td>
+        <td><?php echo (!empty($math_student_row['midterm']) ? $math_student_row['midterm'] : 'No data');?></td>
+        <td><?php echo (!empty($math_student_row['finals']) ? $math_student_row['finals'] : 'No data');?></td>
+        <td><?php echo (empty($math_ave) ? 'No data' : ($math_ave >= 75 ? 'PASSED' : 'FAILED'))?></td>
+
+    </tr>
+</table>
+
 
 
 

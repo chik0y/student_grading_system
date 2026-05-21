@@ -51,6 +51,27 @@ if (isset($_POST['submit'])) {
             echo "New inserted.";
         }
         
+    } elseif ($subj == 'Math') {
+        
+        $prelim = $_POST['prelim'];
+        $midterm = $_POST['midterm'];
+        $finals = $_POST['finals'];
+
+        $sql="SELECT * FROM `tbl_math` WHERE student_id = '$id'";
+        $student = $con->query($sql) or die ($con->error);
+        $rowStud = $student->fetch_assoc();
+        $total = $student->num_rows;
+
+        if ($total > 0) {
+            echo "Cannot add new grade.";
+        } else {
+            $sql="INSERT INTO `tbl_math`(`student_id`, `prelim`, `midterm`, `finals`) VALUES ('$id','$prelim','$midterm','$finals')";
+            $student_math_grade = $con->query($sql) or die ($con->error);
+            echo "New inserted.";
+        }
+
+    } else {
+        echo "";
     }
 }
 
